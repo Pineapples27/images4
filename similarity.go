@@ -4,9 +4,9 @@ package images4
 // and proportion similarity.
 func Similar(iconA, iconB IconT) bool {
 
-	if !propSimilar(iconA, iconB) {
-		return false
-	}
+	//if !propSimilar(iconA, iconB) {
+	//	return false
+	//}
 	if !eucSimilar(iconA, iconB) {
 		return false
 	}
