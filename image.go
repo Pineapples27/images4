@@ -1,6 +1,7 @@
 package images4
 
 import (
+	"golang.org/x/image/webp"
 	"image"
 	"image/color"
 	_ "image/gif"
@@ -8,6 +9,7 @@ import (
 	"image/png"
 	"log"
 	"os"
+	"strings"
 )
 
 // Open opens and decodes an image file for a given path.
@@ -16,12 +18,30 @@ func Open(path string) (img image.Image, err error) {
 	if err != nil {
 		return nil, err
 	}
+	img, err = openWebpImage(path, file)
+	if err != nil {
+		return nil, err
+	}
+	if img != nil {
+		return img, nil
+	}
 	defer file.Close()
 	img, _, err = image.Decode(file)
 	if err != nil {
 		return nil, err
 	}
 	return img, err
+}
+
+func openWebpImage(path string, file *os.File) (img image.Image, err error) {
+	if strings.Contains(path, ".webp") {
+		img, err = webp.Decode(file)
+		if err != nil {
+			return nil, err
+		}
+		return img, nil
+	}
+	return nil, nil
 }
 
 // resizeByNearest resizes an image to the destination size
